@@ -215,7 +215,7 @@ class CalcController {
         let last = '';
 
         this._lastOperator = this.getLastItem();
-        
+
         if (this._operation.length < 3) {
 
             let firstItem = this._operation[0];
@@ -285,8 +285,9 @@ class CalcController {
         this.displayCalc = lastNumber;
 
     }
-
     addOperation(value) {
+
+        console.log('addOperation', value)
 
         if (isNaN(this.getLastOperation())) {
 
@@ -335,7 +336,8 @@ class CalcController {
         if (typeof lastOperation === 'string' && lastOperation.split('').indexOf('.') > -1) return;
 
         if (this.isOperator(lastOperation) || !lastOperation) {
-            this.pushOperation('0.');
+            //this.pushOperation('0.');
+            this.setLastOperation('0.');
         } else {
             this.setLastOperation(lastOperation.toString() + '.');
         }
