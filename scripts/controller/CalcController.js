@@ -21,14 +21,22 @@ class CalcController {
 
     }
 
-    copyToClipboard() {
+    copyToClipboard(){
 
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(this.displayCalc);
-        }
+        document.addEventListener('copy', e =>{
 
-    }
+            let input = document.createElement('input');
+            input.value = this.displayCalc;
+    
+            document.body.appendChild(input);
+            input.select();
+            e.clipboardData.setData('Text', parseFloat(input.value));
 
+            // preventDefault(); previnindo o comportamento padrão e evitando que o dado copiado seja perdido
+            e.preventDefault();
+            input.remove();
+        });
+    }    
     pasteFromClipboard() {
 
         document.addEventListener('paste', e => {
@@ -52,6 +60,7 @@ class CalcController {
         }, 1000);
 
         this.setLastNumberToDisplay();
+        this.copyToClipboard();
         this.pasteFromClipboard();
 
         document.querySelectorAll('.btn-ac').forEach(btn => {
@@ -124,9 +133,9 @@ class CalcController {
                     this.addOperation(parseInt(e.key));
                     break;
 
-                case 'c':
-                    if (e.ctrlKey) this.copyToClipboard();
-                    break;
+                // case 'c':
+                //     if (e.ctrlKey) this.copyToClipboard();
+                //     break;
                 
             }
 
@@ -225,8 +234,8 @@ class CalcController {
             this._lastNumber = this.getLastItem(false);
 
         }
-
-        let result = this.getResult();
+        // correção ao tentar fazer as operações com números com ponto
+        let result = this.getResult().toFixed(2);
 
         if (last === '%') {
 
